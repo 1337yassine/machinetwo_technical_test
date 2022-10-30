@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "technical_test_api_presentation", "technical_test_api_presentation\technical_test_api_presentation.csproj", "{ACFFF519-A90E-4D74-8A2E-FC315BF8A207}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "technical_test_api_presentation", "technical_test_api_presentation\technical_test_api_presentation.csproj", "{ACFFF519-A90E-4D74-8A2E-FC315BF8A207}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "technical_test_api_infrastructure", "technical_test_api_infrastructure\technical_test_api_infrastructure.csproj", "{5A3C81E9-41B7-487D-BCB0-51DF5F383850}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "technical_test_api_infrastructure", "technical_test_api_infrastructure\technical_test_api_infrastructure.csproj", "{5A3C81E9-41B7-487D-BCB0-51DF5F383850}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "technical_test_api_application", "technical_test_api_application\technical_test_api_application.csproj", "{37C95BA0-B6B2-41CD-8E77-7A3A40BC5C6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "technical_test_api_application", "technical_test_api_application\technical_test_api_application.csproj", "{37C95BA0-B6B2-41CD-8E77-7A3A40BC5C6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{8B12CB6F-F7B3-4D28-830E-B18617B4282B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "technical_test_api_infrastructure_test", "technical_test_api_infrastructure_test\technical_test_api_infrastructure_test.csproj", "{A6BA9D14-05B1-421D-B955-7B16F6869EFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,9 +31,16 @@ Global
 		{37C95BA0-B6B2-41CD-8E77-7A3A40BC5C6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37C95BA0-B6B2-41CD-8E77-7A3A40BC5C6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37C95BA0-B6B2-41CD-8E77-7A3A40BC5C6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6BA9D14-05B1-421D-B955-7B16F6869EFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6BA9D14-05B1-421D-B955-7B16F6869EFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6BA9D14-05B1-421D-B955-7B16F6869EFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6BA9D14-05B1-421D-B955-7B16F6869EFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A6BA9D14-05B1-421D-B955-7B16F6869EFB} = {8B12CB6F-F7B3-4D28-830E-B18617B4282B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {641CD346-AF14-4221-A5CA-1E159AB51DB7}
