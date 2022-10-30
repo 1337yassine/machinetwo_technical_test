@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace technical_test_api_infrastructure.Models
+﻿namespace technical_test_api_infrastructure.Models
 {
     public class Note
     {

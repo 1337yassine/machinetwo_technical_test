@@ -1,14 +1,14 @@
-using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using technical_test_api_infrastructure.Context;
-using Serilog;
+using System.Text;
 using technical_test_api_application.User;
-using technical_test_api_infrastructure.Repositories.User;
+using technical_test_api_infrastructure.Context;
 using technical_test_api_infrastructure.Repositories.Note;
+using technical_test_api_infrastructure.Repositories.User;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -50,6 +50,41 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<INoteRepository, NoteRepository>();
 
+var m = builder.Configuration["Jwt:Issuer"];
+
+//auth
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(o =>
+{
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey
+        (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = false,
+        ValidateIssuerSigningKey = true
+    };
+});
+
+//services cors
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder.AllowAnyMethod()
+             .AllowAnyHeader()
+             .WithExposedHeaders()
+             .AllowAnyOrigin();
+}));
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -60,6 +95,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("corsapp");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

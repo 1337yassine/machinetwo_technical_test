@@ -1,10 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace technical_test_api_infrastructure.Base
 {
@@ -18,6 +12,7 @@ namespace technical_test_api_infrastructure.Base
             _dbContext = context;
             _dbSet = context.Set<T>();
         }
+
         public async Task DeleteAsync(object id)
         {
             T existing = await _dbSet.FindAsync(id);
@@ -54,6 +49,5 @@ namespace technical_test_api_infrastructure.Base
         {
             _dbContext.Entry(obj).State = EntityState.Detached;
         }
-
     }
 }

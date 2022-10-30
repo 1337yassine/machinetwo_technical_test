@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Text.Json.Nodes;
 using technical_test_api_application.User;
+using technical_test_api_infrastructure.Dto;
 using technical_test_api_infrastructure.Models;
 using technical_test_api_infrastructure.Repositories.User;
 
@@ -13,12 +13,29 @@ namespace technical_test_api_presentation.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
+        protected IConfiguration _config;
 
-
-        public UserController(IUserRepository userRepository, IUserService userService)
+        public UserController(IUserRepository userRepository, IUserService userService, IConfiguration config)
         {
             _userRepository = userRepository;
             _userService = userService;
+            _config = config;
+        }
+
+        [Route("/Login")]
+        [HttpPost]
+        [SwaggerOperation(Summary = "User Connect")]
+        public async Task<ActionResult> Login([FromBody] Login model)
+        {
+            try
+            {
+                var token = await _userService.generateJwtToken(model);
+                return Ok(token);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Unauthorized");
+            }
         }
 
         [Route("/AddUser")]
@@ -28,7 +45,7 @@ namespace technical_test_api_presentation.Controllers
         {
             try
             {
-                _userRepository.CreateUser(user);
+                await _userRepository.CreateUser(user);
                 return Ok();
             }
             catch (Exception ex)
@@ -40,36 +57,40 @@ namespace technical_test_api_presentation.Controllers
         [Route("/UpdatePwd")]
         [HttpPost]
         [SwaggerOperation(Summary = "API : Update Password ")]
-        public async Task<IActionResult> UpdatePassword([FromBody] JsonObject data)
+        public async Task<IActionResult> UpdatePassword([FromBody] Dictionary<string, string> newPwd)
         {
             try
             {
-                var newPassword = data["newPwd"].ToString();
-                var id = data["iduser"].ToString();
+                var token = Request.Headers.FirstOrDefault(x => x.Key == "Authorization").Value.ToString().Replace("Bearer ", string.Empty);
+                var id = _userService.ValidateToken(token).ToString();
+                var newPassword = newPwd["newPwd"];
                 await _userRepository.PasswordReset(newPassword, id);
-                return Ok();
+                return Ok("Updated Succefully");
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest("Invalid");
             }
         }
+
         //GetNodesByUserId
         [Route("/GetNotesByUser")]
         [HttpGet]
         [SwaggerOperation(Summary = "Get Notes of a specific user")]
-        public async Task<IActionResult> GetUserById([FromQuery] Guid id)
+        public async Task<IActionResult> GetNoteByUser([FromBody] Dictionary<string, string> Id)
         {
             try
             {
-                var notes = await _userService.GetNodesByUserId(id);
+                var token = Request.Headers.FirstOrDefault(x => x.Key == "Authorization").Value.ToString().Replace("Bearer ", string.Empty);
+                var idUser = _userService.ValidateToken(token);
+
+                var notes = await _userService.GetNodesByUserId(idUser);
                 return Ok(notes);
             }
             catch (Exception)
             {
-                return NotFound();
+                return NotFound("Invalid Operation");
             }
         }
-
     }
 }

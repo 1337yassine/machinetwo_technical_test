@@ -3,12 +3,14 @@
     public class ApiKeyMiddleware
     {
         private readonly RequestDelegate _next;
-        private
-        const string APIKEY = "XApiKey";
+
+        private const string APIKEY = "XApiKey";
+
         public ApiKeyMiddleware(RequestDelegate next)
         {
             _next = next;
         }
+
         public async Task InvokeAsync(HttpContext context)
         {
             if (!context.Request.Headers.TryGetValue(APIKEY, out
@@ -27,7 +29,6 @@
                 return;
             }
             await _next(context);
-
         }
     }
 }
